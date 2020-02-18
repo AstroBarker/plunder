@@ -51,7 +51,7 @@ def weights(f, n):
     w = []
     for i in range(len(n)):
         w.append( np.ones(n[i])*v[i] )
-
+    
     # w is a lis tof arrays. This concatenates it into a single array.
     w = np.concatenate(w, axis=None)
 
@@ -92,4 +92,8 @@ if __name__ == '__main__':
 
     winner = np.random.choice(people, 1, p=w)[0]
 
+    print(f'The participants and their respective weights are: \n {list(zip(people,w))}\n\n')
+    print(f'Just to check... the weights, summed, should equal... {sum(w)}\n')
+    print('\n---------------------------------------------------- ')
     print(f'The next discussion group leader is {winner}!!!!!')
+    print('---------------------------------------------------- \n')
