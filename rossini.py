@@ -13,6 +13,7 @@
 import numpy as np
 
 f = 3.0 / 4.0 # Ratio between probability weights
+REMOVE_PREV = True
 
 def tier_sizes(tiers):
     """
@@ -75,24 +76,100 @@ def sortt(a, b):
     
     return a,b
 
+def store_person(name, fn):
+    """
+    Write a name to a file for later use. 
+
+    Parameters:
+    -----------
+    name : str, person
+    fn : str, file to write to
+    """
+
+    with open(fn,"a") as file:
+        file.write(name + '\n')
+    
+def get_previous_person(fn):
+    """
+    Get the last person to lead a discussion from the 
+    file written in store_person()
+
+    Parameters:
+    -----------
+    fn : str, filename to read
+    """
+    from os import path
+
+    # This will trigger if fn doesn't exist, i.e., no one has pressented yet
+    if not path.exists(fn): 
+        return None
+    else:
+        ppl = np.genfromtxt(fn, skip_header=0, unpack=True, dtype='unicode')
+        # Unnecessarily complicated.... if only one person was in the file, 
+        # ppl isn't returned as an array from genfromtxt. So we just return ppl. 
+        if ( np.shape(ppl) == () ):
+            return ppl
+        else:
+            return ppl[-1]
+
+def remove_person(people, tiers, prev):
+    """
+    Removes the last leader from the people, tiers arrays prior to 
+    computing the weights and selecting a winner. This should not affect the 
+    distribution, and is simply to allow for no repetitions.
+
+    Parameters:
+    -----------
+    people : array
+    tiers : array
+    prev : str, person to have their entires remove from people, tiers.
+    """
+
+    ind = np.where(people == prev)[0]
+
+    people = np.delete(people, ind)
+    tiers = np.delete(tiers, ind)
+
+    return people, tiers
+
 if __name__ == '__main__':
     # yee haw
     print('\n**********************************************************')
     print( '**** ROSSINI: RandOmized diScuSsIoN group leader selectIon')
     print( '***********************************************************\n') 
+
     fn = 'test_people.dat'
+    fn_out = 'people_old.dat'
 
+    # Read in people, tiers, and check for previous leaders
     people, tiers = np.genfromtxt(fn, skip_header=1, unpack=True, dtype='unicode')
+    prev = get_previous_person(fn_out)
 
+    # If there was a previous leader AND you want to remove them, do so
+    if ( prev != None and REMOVE_PREV == True):
+        people, tiers = remove_person(people, tiers, prev)
+
+    # Sort people according to their tiers
     tiers, people = sortt(tiers, people)
-    
+
+    # Number of tiers
     n = tier_sizes(tiers)
     
+    # Probabalistic weights
     w = weights(f,n)
 
+    #-----------------------------------------------------------
+    #  We use numpy's random.choice function that will draw 
+    #  random samples from a given population (people)
+    #  with given probabilities (weights, w).
+    #-----------------------------------------------------------
     winner = np.random.choice(people, 1, p=w)[0]
+    
+    # Keep track of leaders in fn_out. 
+    # Future work: reduce their probabilities. Maybe lower their tiers?
+    store_person(winner, fn_out)
 
-    print(f'The participants and their respective weights are: \n {list(zip(people,w))}\n\n')
+    print(f'The participants and their respective weights are: \n {list(zip(winner,w))}\n\n')
     print(f'Just to check... the weights, summed, should equal... {sum(w)}\n')
     print('\n---------------------------------------------------- ')
     print(f'The next discussion group leader is {winner}!!!!!')
