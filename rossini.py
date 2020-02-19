@@ -148,14 +148,20 @@ def remove_person(people, tiers, prev):
 
     return people, tiers
 
-if __name__ == '__main__':
-    # yee haw
-    print('\n**********************************************************')
-    print( '**** ROSSINI: RandOmized diScuSsIoN group leader selectIon')
-    print( '***********************************************************\n') 
+def draw_sample(fn, fn_out):
+    """
+    The bread and butter. This will read in the people data from fn, 
+    get the previous speakers (if any) from fn_out. Optionally, 
+    remove the previous leader from the sample. Then, sort people by tiers 
+    and calculate the probability weights. Then we use np.random.choice
+    to select a person from our sample given our calculated weights.
+    Finally, write that person to fn_out.
 
-    fn = 'test_people.dat'
-    fn_out = 'people_old.dat'
+    Parameters:
+    -----------
+    fn : str, filename containing people and tiers
+    fn_out : str, filename to write winners to.
+    """
 
     # Read in people, tiers, and check for previous leaders
     people, tiers = np.genfromtxt(fn, skip_header=1, unpack=True, dtype='unicode')
@@ -174,6 +180,10 @@ if __name__ == '__main__':
     # Probabalistic weights
     w = weights(f,n)
 
+    print(f'The participants and their respective weights are: \n {list(zip(people,w))}\n\n')
+    print(f'Just to check... the weights, summed, should equal... {sum(w)} ')
+    if ( sum(w) - 1.0 <= 1e-5): print(':)\n')
+
     #-----------------------------------------------------------
     #  We use numpy's random.choice function that will draw 
     #  random samples from a given population (people)
@@ -185,8 +195,21 @@ if __name__ == '__main__':
     # Future work: reduce their probabilities. Maybe lower their tiers?
     store_person(winner, get_tier(winner, people, tiers), fn_out)
 
-    print(f'The participants and their respective weights are: \n {list(zip(people,w))}\n\n')
-    print(f'Just to check... the weights, summed, should equal... {sum(w)} :)\n')
+    return winner
+
+if __name__ == '__main__':
+    # yee haw
+    print('\n**********************************************************')
+    print( '**** ROSSINI: RandOmized diScuSsIoN group leader selectIon')
+    print( '***********************************************************\n') 
+
+    fn = 'test_people.dat'
+    fn_out = 'people_old.dat'
+
+    winner = draw_sample(fn, fn_out)
+
     print('\n---------------------------------------------------- ')
     print(f'The next discussion group leader is {winner}!!!!!')
     print('---------------------------------------------------- \n')
+
+    

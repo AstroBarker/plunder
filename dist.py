@@ -6,7 +6,8 @@
 #  Author: Brandon Barker
 #  -------------------------
 # 
-#  Plot the distribution from rossini.py
+#  Plot the distribution from rossini.py. Most just to check it out,
+#  make sure it makes sense.
 #
 # -----------------------------------------------------------------------------
 
@@ -36,6 +37,8 @@ def plot_bar_from_counter(counter, ax=None):
 
     return ax
 
+
+
 if __name__ == '__main__':
 
     from rossini import *
@@ -44,17 +47,10 @@ if __name__ == '__main__':
     from collections import Counter
 
     fn = 'test_people.dat'
+    fn_out = 'people_old.dat'
 
-    people, tiers = np.genfromtxt(fn, skip_header=1, unpack=True, dtype='unicode')
-
-    tiers, people = sortt(tiers, people)
-    
-    n = tier_sizes(tiers)
-    
-    w = weights(f,n)
-
-    num = len(people) * 100
-    samples = np.random.choice(people, num, p=w)
+    num = 500
+    samples = np.array([draw_sample(fn, fn_out) for _ in range(num)])
 
     counts = Counter(samples)
 
