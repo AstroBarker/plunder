@@ -6,14 +6,15 @@
 #  Author: Brandon Barker
 #  -------------------------
 # 
-#  Randomly select ...
+#  Randomly select a person from an input file with a "tiered, semi-uniform"
+#  distribution. 
 #
 # -----------------------------------------------------------------------------
 
 import numpy as np
 
 f = 3.0 / 4.0 # Ratio between probability weights
-REMOVE_PREV = True
+REMOVE_PREV = True # Remove the previous leader from the current distribution?
 
 def tier_sizes(tiers):
     """
@@ -170,7 +171,7 @@ if __name__ == '__main__':
     store_person(winner, fn_out)
 
     print(f'The participants and their respective weights are: \n {list(zip(winner,w))}\n\n')
-    print(f'Just to check... the weights, summed, should equal... {sum(w)}\n')
+    print(f'Just to check... the weights, summed, should equal... {sum(w)} :)\n')
     print('\n---------------------------------------------------- ')
     print(f'The next discussion group leader is {winner}!!!!!')
     print('---------------------------------------------------- \n')
