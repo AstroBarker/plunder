@@ -36,8 +36,7 @@ def get_tier(name, people, tiers):
     people : array, list of people
     tiers : array, list of tiers
     """
-
-    ind = np.where(people == name)[0]    
+    ind = np.where(people == np.asarray(name))[0][0]
 
     return tiers[ind]
 
@@ -92,18 +91,19 @@ def sortt(a, b):
     
     return a,b
 
-def store_person(name, fn):
+def store_person(name, tier, fn):
     """
     Write a name to a file for later use. 
 
     Parameters:
     -----------
     name : str, person
+    tier : int, their tier
     fn : str, file to write to
     """
 
     with open(fn,"a") as file:
-        file.write(name + '\n')
+        file.write(name + ' ' + tier + '\n')
     
 def get_previous_person(fn):
     """
@@ -120,7 +120,7 @@ def get_previous_person(fn):
     if not path.exists(fn): 
         return None
     else:
-        ppl = np.genfromtxt(fn, skip_header=0, unpack=True, dtype='unicode')
+        ppl, tier = np.genfromtxt(fn, skip_header=0, unpack=True, dtype='unicode')
         # Unnecessarily complicated.... if only one person was in the file, 
         # ppl isn't returned as an array from genfromtxt. So we just return ppl. 
         if ( np.shape(ppl) == () ):
@@ -181,13 +181,12 @@ if __name__ == '__main__':
     #-----------------------------------------------------------
     winner = np.random.choice(people, 1, p=w)[0]
     
-    # Keep track of leaders in fn_out. 
+    # Keep track of leaders and their tiers in fn_out. 
     # Future work: reduce their probabilities. Maybe lower their tiers?
-    store_person(winner, fn_out)
+    store_person(winner, get_tier(winner, people, tiers), fn_out)
 
     print(f'The participants and their respective weights are: \n {list(zip(people,w))}\n\n')
     print(f'Just to check... the weights, summed, should equal... {sum(w)} :)\n')
     print('\n---------------------------------------------------- ')
     print(f'The next discussion group leader is {winner}!!!!!')
     print('---------------------------------------------------- \n')
-    # print(get_tier(winner, people, tiers))
