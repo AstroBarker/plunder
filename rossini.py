@@ -26,6 +26,21 @@ def tier_sizes(tiers):
 
     return n
 
+def get_tier(name, people, tiers):
+    """
+    Return the tier of a specific person
+
+    Parameters:
+    -----------
+    name : str, person whose tier is being looked up
+    people : array, list of people
+    tiers : array, list of tiers
+    """
+
+    ind = np.where(people == name)[0]    
+
+    return tiers[ind]
+
 def weights(f, n):
     """
     Return weights for my probability distribution,
@@ -170,8 +185,9 @@ if __name__ == '__main__':
     # Future work: reduce their probabilities. Maybe lower their tiers?
     store_person(winner, fn_out)
 
-    print(f'The participants and their respective weights are: \n {list(zip(winner,w))}\n\n')
+    print(f'The participants and their respective weights are: \n {list(zip(people,w))}\n\n')
     print(f'Just to check... the weights, summed, should equal... {sum(w)} :)\n')
     print('\n---------------------------------------------------- ')
     print(f'The next discussion group leader is {winner}!!!!!')
     print('---------------------------------------------------- \n')
+    # print(get_tier(winner, people, tiers))
