@@ -6,18 +6,19 @@
 #  Author: Brandon Barker
 #  -------------------------
 # 
-#  Plot the distribution from rossini.py. Most just to check it out,
+#  Plot the distribution from rossini.py. Mostly just to check it out,
 #  make sure it makes sense.
 #
 # -----------------------------------------------------------------------------
 
-def plot_bar_from_counter(counter, ax=None):
+def plot_bar_from_counter(counter, num, ax=None):
     """"
     This function creates a bar plot from a counter.
 
     :param counter: This is a counter object, a dictionary with the item as the key
      and the frequency as the value
     :param ax: an axis of matplotlib
+    :param num: number of samples, for normalization
     :return: the axis wit the object in it
     """
 
@@ -27,6 +28,11 @@ def plot_bar_from_counter(counter, ax=None):
 
     frequencies = (counter.values())
     names = list(counter.keys())
+
+    frequencies, names = sortt(frequencies, names)
+
+    for i in range(len(frequencies)):
+        frequencies[i] /= num
 
     x_coordinates = np.arange(len(counter))
     ax.bar(x_coordinates, frequencies, align='center')
@@ -49,10 +55,10 @@ if __name__ == '__main__':
     fn = 'test_people.dat'
     fn_out = 'people_old.dat'
 
-    num = 500
+    num = 1000
     samples = np.array([draw_sample(fn, fn_out) for _ in range(num)])
 
     counts = Counter(samples)
 
-    plot_bar_from_counter(counts)
+    plot_bar_from_counter(counts, num)
     plt.show()
