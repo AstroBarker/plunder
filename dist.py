@@ -23,7 +23,7 @@ def plot_bar_from_counter(counter, num, ax=None):
     ax: an axis of matplotlib
     num: number of samples, for normalization
 
-    return: the axis wit the object in it
+    return: the axis with the object in it
     """
 
     if ax is None:
