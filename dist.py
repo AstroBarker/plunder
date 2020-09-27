@@ -39,7 +39,7 @@ def plot_bar_from_counter(counter, num, ax=None):
         frequencies[i] /= num
 
     x_coordinates = np.arange(len(counter))
-    ax.bar(x_coordinates, frequencies, align='center')
+    ax.bar(x_coordinates, frequencies, align='center', color="orchid")
 
     ax.xaxis.set_major_locator(plt.FixedLocator(x_coordinates))
     ax.xaxis.set_major_formatter(plt.FixedFormatter(names))
@@ -53,7 +53,6 @@ if __name__ == '__main__':
 
     from rossini import *
     import matplotlib.pyplot as plt
-    import pandas
     from collections import Counter
 
     fn = 'people.dat'
