@@ -15,11 +15,15 @@ def plot_bar_from_counter(counter, num, ax=None):
     """"
     This function creates a bar plot from a counter.
 
-    :param counter: This is a counter object, a dictionary with the item as the key
-     and the frequency as the value
-    :param ax: an axis of matplotlib
-    :param num: number of samples, for normalization
-    :return: the axis wit the object in it
+    Parameters:
+    -----------
+
+    counter: This is a counter object, a dictionary with the item as the key
+        and the frequency as the value
+    ax: an axis of matplotlib
+    num: number of samples, for normalization
+
+    return: the axis wit the object in it
     """
 
     if ax is None:
@@ -52,7 +56,7 @@ if __name__ == '__main__':
     import pandas
     from collections import Counter
 
-    fn = 'test_people.dat'
+    fn = 'people.dat'
     fn_out = 'people_old.dat'
 
     num = 1000

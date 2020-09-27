@@ -13,7 +13,7 @@
 
 import numpy as np
 
-f = 3.0 / 4.0 # Ratio between probability weights
+f = 3.0 / 4.0 # Ratio between probability weights. Decrease to further separate tiers
 REMOVE_PREV = True # Remove the previous leader from the current distribution?
 
 def tier_sizes(tiers):
@@ -42,6 +42,7 @@ def get_tier(name, people, tiers):
 
 def weights(f, n):
     """
+    The math happens here.
     Return weights for my probability distribution,
 
     Parameters:
@@ -68,7 +69,7 @@ def weights(f, n):
     for i in range(len(n)):
         w.append( np.ones(n[i])*v[i] )
     
-    # w is a lis tof arrays. This concatenates it into a single array.
+    # w is a list of arrays. This concatenates it into a single array.
     w = np.concatenate(w, axis=None)
 
     return w
@@ -203,7 +204,7 @@ if __name__ == '__main__':
     print( '**** ROSSINI: RandOmized diScuSsIoN group leader selectIon')
     print( '***********************************************************\n') 
 
-    fn = 'test_people.dat'
+    fn = 'people.dat'
     fn_out = 'people_old.dat'
 
     winner = draw_sample(fn, fn_out)
